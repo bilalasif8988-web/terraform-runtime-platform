@@ -302,11 +302,11 @@ services:
     container_name: pocketbase
     restart: unless-stopped
 
-      ports:
-        - "8091:80"
+    ports:
+      - "8091:8090"
 
     volumes:
-    - pocketbase_data:/pb_data
+      - pocketbase_data:/pb_data
 
   webxr:
     image: nginx:latest

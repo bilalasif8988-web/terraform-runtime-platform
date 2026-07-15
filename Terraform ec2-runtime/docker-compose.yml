@@ -1,5 +1,9 @@
 services:
 
+  #########################################
+  # Blockchain
+  #########################################
+
   blockchain:
     image: trufflesuite/ganache:latest
     container_name: blockchain
@@ -14,6 +18,10 @@ services:
     ports:
       - "8085:80"
 
+  #########################################
+  # AI Chatbot
+  #########################################
+
   chatbot:
     image: ghcr.io/open-webui/open-webui:main
     container_name: chatbot
@@ -22,27 +30,197 @@ services:
       - "3000:8080"
     volumes:
       - openwebui_data:/app/backend/data
+
+  #########################################
+  # Metaverse (WebXR)
+  #########################################
+
   webxr:
     image: nginx:latest
     container_name: webxr
     restart: unless-stopped
-
     ports:
       - "8090:80"
-
     volumes:
       - /opt/runtime/webxr:/usr/share/nginx/html:ro
+
+  #########################################
+  # Backend as a Service
+  #########################################
 
   pocketbase:
     image: spectado/pocketbase:latest
     container_name: pocketbase
     restart: unless-stopped
-
     ports:
-      - "8091:80"
-
+      - "8091:8090"
     volumes:
       - pocketbase_data:/pb_data
+
+  #########################################
+  # Runtime Containers
+  #########################################
+
+  python:
+    image: python:3.12
+    container_name: python-runtime
+    restart: unless-stopped
+    command: sleep infinity
+
+  node:
+    image: node:22
+    container_name: node-runtime
+    restart: unless-stopped
+    command: sleep infinity
+
+  java:
+    image: eclipse-temurin:21
+    container_name: java-runtime
+    restart: unless-stopped
+    command: sleep infinity
+
+  golang:
+    image: golang:1.22
+    container_name: go-runtime
+    restart: unless-stopped
+    command: sleep infinity
+
+  php:
+    image: php:8.3-cli
+    container_name: php-runtime
+    restart: unless-stopped
+    command: tail -f /dev/null
+
+  ruby:
+    image: ruby:3.3
+    container_name: ruby-runtime
+    restart: unless-stopped
+    command: sleep infinity
+
+  rust:
+    image: rust:latest
+    container_name: rust-runtime
+    restart: unless-stopped
+    command: sleep infinity
+
+  #########################################
+  # Databases
+  #########################################
+
+
+  mariadb:
+    image: mariadb:11
+    container_name: mariadb-db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: root123
+    ports:
+      - "3307:3306"
+
+  postgres:
+    image: postgres:17
+    container_name: postgres-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: appdb
+    ports:
+      - "5432:5432"
+
+  mongodb:
+    image: mongo:8
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+
+  redis:
+    image: redis:8
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Password123!"
+    ports:
+      - "1433:1433"
+
+  #########################################
+  # Web Servers
+  #########################################
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-server
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+
+  apache:
+    image: httpd:2.4
+    container_name: apache-server
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+
+  tomcat:
+    image: tomcat:11-jdk21
+    container_name: tomcat-server
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+
+  wildfly:
+    image: quay.io/wildfly/wildfly:latest
+    container_name: wildfly-server
+    restart: unless-stopped
+    ports:
+      - "8083:8080"
+
+  #########################################
+  # Artificial Intelligence
+  #########################################
+
+  jupyter:
+    image: jupyter/base-notebook:latest
+    container_name: ai-notebook
+    restart: unless-stopped
+    environment:
+      JUPYTER_TOKEN: admin123
+    ports:
+      - "8888:8888"
+
+  #########################################
+  # IoT
+  #########################################
+
+  emqx:
+    image: emqx/emqx:latest
+    container_name: emqx
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "18083:18083"
+
+  #########################################
+  # Container Management
+  #########################################
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
 volumes:
   openwebui_data:

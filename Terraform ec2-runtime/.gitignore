@@ -1,16 +1,18 @@
 .terraform/
 terraform.tfstate
 terraform.tfstate.backup
-.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
 
 terraform-key.pem
 
-*.log
-
 .vscode/
 
-node_modules/
+*.log
 
 .env
 
 *.tfvars
+
+.DS_Store
+.terraform.lock.hcl
